@@ -56,22 +56,22 @@ gulp.task('scripts', function () {
     .pipe(browserSync.reload({stream: true}));
 });
 
-gulp.task('templates', function() {
-  gulp.src('app/templates/**/*.hbs')
-    .pipe(plumber())
-    .pipe(handlebars())
-    .pipe(wrap('Handlebars.template(<%= contents %>)'))
-    .pipe(declare({
-      namespace: 'JST',
-      noRedeclare: true, // Avoid duplicate declarations
-      processName: function(filePath) {
-        return declare.processNameByPath(filePath.replace('app/templates/', '')).replace('.', '/');
-      }
-    }))
-    .pipe(concat('templates.js'))
-    .pipe(gulp.dest('.tmp/scripts/'))
-    .pipe(browserSync.reload({stream: true}));
-});
+// gulp.task('templates', function() {
+//   gulp.src('app/templates/**/*.hbs')
+//     .pipe(plumber())
+//     .pipe(handlebars())
+//     .pipe(wrap('Handlebars.template(<%= contents %>)'))
+//     .pipe(declare({
+//       namespace: 'JST',
+//       noRedeclare: true, // Avoid duplicate declarations
+//       processName: function(filePath) {
+//         return declare.processNameByPath(filePath.replace('app/templates/', '')).replace('.', '/');
+//       }
+//     }))
+//     .pipe(concat('templates.js'))
+//     .pipe(gulp.dest('.tmp/scripts/'))
+//     .pipe(browserSync.reload({stream: true}));
+// });
 
 gulp.task('images', function(){
   return gulp.src('app/images/**/*.+(png|jpg|jpeg|gif|svg)')
@@ -168,7 +168,7 @@ gulp.task('browserSync', function() {
 gulp.task('watch', ['browserSync', 'styles'], function(){
   gulp.watch('app/scss/**/*.scss', ['styles']);
   gulp.watch('app/scripts/**/*.js', ['scripts']);
-  gulp.watch('app/templates/**/*.hbs', ['templates']);
+  // gulp.watch('app/templates/**/*.hbs', ['templates']);
   gulp.watch('app/images/**/*.+(png|jpg|jpeg|gif|svg)', ['images']);
   gulp.watch('app/fonts/**/*', ['fonts']);
   gulp.watch('tests/*.js', ['tests:scripts']);
@@ -177,7 +177,7 @@ gulp.task('watch', ['browserSync', 'styles'], function(){
 
 gulp.task('build', function (callback) {
   runSequence('clean:dist',
-    ['styles', 'scripts', 'templates', 'wiredep', 'wiredep:tests', 'tests:scripts', 'useref', 'images', 'fonts'],
+    ['styles', 'scripts', 'wiredep', 'wiredep:tests', 'tests:scripts', 'useref', 'images', 'fonts'],
     callback
   );
 });
@@ -188,7 +188,7 @@ gulp.task('deploy', function() {
 });
 
 gulp.task('default', function (callback) {
-  runSequence(['styles', 'fonts', 'scripts', 'templates', 'wiredep', 'wiredep:tests', 'tests:scripts', 'browserSync', 'watch'], callback);
+  runSequence(['styles', 'fonts', 'scripts', 'wiredep', 'wiredep:tests', 'tests:scripts', 'browserSync', 'watch'], callback);
 });
 
 function onError(error){
